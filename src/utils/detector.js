@@ -28,13 +28,25 @@ export const runDetector = async (video, canvas) => {
     }
 
     const elapsedTime = performance.now() - startTime;
-    const duration = 50000;
+    const duration = 40000;
 
     frames.push({ time: elapsedTime, keypoints: faces[0]?.keypoints });
     requestAnimationFrame(() => drawMesh(faces[0], ctx));
     detect(detector);
     if (elapsedTime > duration) {
-      console.log("Captured 50 seconds of data:", frames);
+      const jsonString = JSON.stringify(frames);
+      const blob = new Blob([jsonString], { type: "application/json" });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "alphabes.json";
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      console.log("Captured 40 seconds of data:", frames);
       startTime = null;
       frames = [];
     }
