@@ -2,7 +2,7 @@ import { TRIANGULATION } from "./triangulation";
 
 export const drawMesh = (prediction, ctx) => {
   if (!prediction) return;
-  const keyPoints = prediction;
+  const keyPoints = prediction.keypoints;
   // console.log(prediction.keypoints);
   if (!keyPoints) return;
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
