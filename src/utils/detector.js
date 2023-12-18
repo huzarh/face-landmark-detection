@@ -28,7 +28,7 @@ export const runDetector = async (video, canvas) => {
     }
 
     const elapsedTime = performance.now() - startTime;
-    const duration = 40000;
+    const duration = 10000;
 
     frames.push({ time: elapsedTime, keypoints: faces[0]?.keypoints });
     requestAnimationFrame(() => drawMesh(faces[0], ctx));
@@ -46,7 +46,7 @@ export const runDetector = async (video, canvas) => {
 
       document.body.removeChild(link);
 
-      console.log("Captured 40 seconds of data:", frames);
+      console.log("Captured 10 seconds of data:", frames);
       startTime = null;
       frames = [];
     }

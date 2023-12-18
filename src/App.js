@@ -24,8 +24,19 @@ function App() {
     runDetector(video, canvasRef.current);
     setLoaded(true);
   };
+  const css = {
+    position: "absolute",
+    borderRadius: 50,
+    backgroundColor: "blue",
+
+    marginLeft: inputResolution.height / 2,
+    width: 10,
+    height: 10,
+  };
   return (
     <div>
+      <div style={{ ...css, marginTop: inputResolution.width / 2.7 }}></div>
+      <div style={{ ...css, marginTop: inputResolution.width / 1.7 }}></div>
       <Webcam
         width={inputResolution.width}
         height={inputResolution.height}
@@ -37,7 +48,7 @@ function App() {
         ref={canvasRef}
         width={inputResolution.width}
         height={inputResolution.height}
-        style={{ position: "absolute", backgroundColor: "grey" }}
+        style={{ backgroundColor: "grey" }}
       />
       {loaded ? <></> : <header>Loading...</header>}
     </div>
