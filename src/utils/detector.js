@@ -1,6 +1,6 @@
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { drawMesh } from "./drawMesh";
-export const runDetector = async (video, canvas, frames) => {
+export const runDetector = async (video, canvas, setFrames) => {
   const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
   const detectorConfig = {
     runtime: "tfjs",
@@ -11,6 +11,7 @@ export const runDetector = async (video, canvas, frames) => {
   );
 
   let startTime = null;
+  let currentFrames = [];
 
   const detect = async (net) => {
     const estimationConfig = { flipHorizontal: false };
@@ -24,27 +25,20 @@ export const runDetector = async (video, canvas, frames) => {
 
     const elapsedTime = performance.now() - startTime;
 
-    frames.push({ time: elapsedTime, keypoints: faces[0]?.keypoints });
-    requestAnimationFrame(() => drawMesh(faces[0], ctx));
+    currentFrames.push(";-1-;");
+    requestAnimationFrame(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      drawMesh(faces[0], ctx);
+    });
+
     detect(detector);
 
-    const duration = 5000;
+    // const duration = 5000;
+    setFrames(currentFrames);
     // if (elapsedTime > duration) {
-    //   const jsonString = JSON.stringify(frames);
-    //   const blob = new Blob([jsonString], { type: "application/json" });
-
-    //   const link = document.createElement("a");
-    //   link.href = URL.createObjectURL(blob);
-    //   link.download = "alphabes.json";
-    //   document.body.appendChild(link);
-
-    //   link.click();
-
-    //   document.body.removeChild(link);
-
-    //   console.log("Captured 5 seconds of data:", frames);
+    //   console.log("Captured 5 seconds of data:", currentFrames);
     //   startTime = null;
-    //   frames = [];
+    //   currentFrames = [];
     // }
   };
 

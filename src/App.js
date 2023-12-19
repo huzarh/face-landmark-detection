@@ -15,53 +15,63 @@ const videoConstraints = {
   facingMode: "user",
 };
 function App() {
-  let frames = [];
-
-  const save = (arg) => {
-    const jsonString = JSON.stringify(arg);
-    const blob = new Blob([jsonString], { type: "application/json" });
-
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "alphabes.json";
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    console.log("Captured 5 seconds of data:", arg);
-    startTime = null;
-    arg = [];
-  };
-  // Check if the browser supports navigator.mediaDevices.getUserMedia
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    // Request access to the webcam
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(function (stream) {
-        // If access is granted, display the video stream in a video element
-        const video = document.querySelector("video");
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch(function (err) {
-        // Handle the error
-        console.error("Error accessing the webcam: ", err);
-      });
-  } else {
-    console.error("getUserMedia is not supported in this browser");
-  }
-
   const canvasRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const [frames, setFrames] = useState([]);
+  const [time, setTime] = useState(0);
+  const [start, setStart] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
+
+  useEffect(() => {
+    if (start) {
+      const id = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+
+      setIntervalId(id);
+    } else {
+      clearInterval(intervalId);
+    }
+    return () => clearInterval(intervalId);
+  }, [start]);
+  const funcStart = () => {
+    setStart(true);
+  };
+  const cancel = () => {
+    clearInterval(intervalId);
+    setTime(0);
+    setStart(false);
+  };
+
+  const save = (arg) => {
+    // const jsonString = JSON.stringify(arg);
+    // const blob = new Blob([jsonString], { type: "application/json" });
+
+    // const link = document.createElement("a");
+    // link.href = URL.createObjectURL(blob);
+    // link.download = "alphabes.json";
+    // document.body.appendChild(link);
+
+    // link.click();
+
+    // document.body.removeChild(link);
+
+    // startTime = null;
+    // arg = [];
+    console.log(arg.length, arg);
+    clearInterval(intervalId);
+    setTime(0);
+    setStart(false);
+  };
+
   const handleVideoLoad = (videoNode) => {
     const video = videoNode.target;
     if (video.readyState !== 4) return;
     if (loaded) return;
-    runDetector(video, canvasRef.current, frames);
+    runDetector(video, canvasRef.current, setFrames);
     setLoaded(true);
   };
+
   const css = {
     position: "absolute",
     borderRadius: 50,
@@ -70,20 +80,61 @@ function App() {
     width: 10,
     height: 10,
   };
+
   return (
     <div>
       <button
         style={{
           position: "absolute",
-          backgroundColor: "red",
-          padding: 20,
-          marginLeft: 700,
+          backgroundColor: "blue",
+          padding: 7,
+          marginLeft: 800,
           marginTop: 200,
+          color: "#fff",
+          fontSize: 20,
+          width: 100,
+          borderRadius: 10,
         }}
-        onClick={() => save(frames)}
+        onClick={() => funcStart()}
       >
-        İnder
+        başlat
       </button>
+      {start && (
+        <button
+          style={{
+            position: "absolute",
+            backgroundColor: "red",
+            padding: 7,
+            marginLeft: 800,
+            marginTop: 300,
+            width: 100,
+            color: "#fff",
+            fontSize: 20,
+            borderRadius: 10,
+          }}
+          onClick={() => cancel()}
+        >
+          İnder
+        </button>
+      )}
+      {start && (
+        <button
+          style={{
+            position: "absolute",
+            backgroundColor: "red",
+            padding: 7,
+            marginLeft: 800,
+            marginTop: 300,
+            width: 100,
+            color: "#fff",
+            fontSize: 20,
+            borderRadius: 10,
+          }}
+          onClick={() => save(frames)}
+        >
+          İnder
+        </button>
+      )}
       <div
         style={{
           ...css,
@@ -91,6 +142,7 @@ function App() {
           marginLeft: inputResolution.height / 2,
         }}
       ></div>
+      {time !== 0 && <h1 style={css}>{time}</h1>}
       <div
         style={{
           ...css,
