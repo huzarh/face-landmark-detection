@@ -35,6 +35,9 @@ function App() {
     return () => clearInterval(intervalId);
   }, [start]);
   const funcStart = () => {
+    setFrames((arg) => {
+      return [];
+    });
     setStart(true);
   };
   const cancel = () => {
@@ -58,7 +61,7 @@ function App() {
 
     // startTime = null;
     // arg = [];
-    console.log(arg.length, arg);
+    console.log(arg);
     clearInterval(intervalId);
     setTime(0);
     setStart(false);

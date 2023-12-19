@@ -25,13 +25,14 @@ export const runDetector = async (video, canvas, setFrames) => {
 
     const elapsedTime = performance.now() - startTime;
 
-    currentFrames.push(";-1-;");
+    currentFrames.push(";-1-;   " + currentFrames.length);
     requestAnimationFrame(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
       drawMesh(faces[0], ctx);
     });
 
     detect(detector);
+    console.log(currentFrames.length);
 
     // const duration = 5000;
     setFrames(currentFrames);
