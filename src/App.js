@@ -26,7 +26,7 @@ function App() {
     if (start) {
       const id = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
-      }, 100);
+      }, 25);
 
       setIntervalId(id);
     } else {

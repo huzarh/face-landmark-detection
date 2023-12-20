@@ -32,7 +32,7 @@ export const runDetector = async (video, canvas, setFrames) => {
     });
 
     detect(detector);
-
+    console.log(currentFrames.length);
     // const duration = 5000;
     setFrames(currentFrames);
     // if (elapsedTime > duration) {
