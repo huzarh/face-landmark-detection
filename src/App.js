@@ -26,7 +26,7 @@ function App() {
     if (start) {
       const id = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
-      }, 160);
+      }, 100);
 
       setIntervalId(id);
     } else {
@@ -108,7 +108,7 @@ function App() {
             backgroundColor: "red",
             padding: 7,
             marginLeft: 800,
-            marginTop: 300,
+            marginTop: 250,
             width: 100,
             color: "#fff",
             fontSize: 20,
@@ -116,7 +116,7 @@ function App() {
           }}
           onClick={() => cancel()}
         >
-          İnder
+          İftal
         </button>
       )}
       {start && (
