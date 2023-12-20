@@ -18,15 +18,15 @@ function App() {
   const canvasRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [frames, setFrames] = useState([]);
-  const [time, setTime] = useState(0);
+
   const [start, setStart] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-
+  const [time, setTime] = useState(frames.length);
   useEffect(() => {
     if (start) {
       const id = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
-      }, 1000);
+      }, 160);
 
       setIntervalId(id);
     } else {
@@ -35,9 +35,6 @@ function App() {
     return () => clearInterval(intervalId);
   }, [start]);
   const funcStart = () => {
-    setFrames((arg) => {
-      return [];
-    });
     setStart(true);
   };
   const cancel = () => {
@@ -47,21 +44,23 @@ function App() {
   };
 
   const save = (arg) => {
-    // const jsonString = JSON.stringify(arg);
-    // const blob = new Blob([jsonString], { type: "application/json" });
+    let arr = [];
+    for (let i = time; i >= 0; i--) {
+      arr.push(arg[arg.length - i]);
+    }
 
-    // const link = document.createElement("a");
-    // link.href = URL.createObjectURL(blob);
-    // link.download = "alphabes.json";
-    // document.body.appendChild(link);
+    const jsonString = JSON.stringify(arr);
+    const blob = new Blob([jsonString], { type: "application/json" });
 
-    // link.click();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "alphabes.json";
+    document.body.appendChild(link);
 
-    // document.body.removeChild(link);
+    link.click();
 
-    // startTime = null;
-    // arg = [];
-    console.log(arg);
+    document.body.removeChild(link);
+
     clearInterval(intervalId);
     setTime(0);
     setStart(false);
